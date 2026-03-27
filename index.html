@@ -1,503 +1,512 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Coffee, 
-  Tent, 
-  MapPin, 
-  Instagram, 
-  Clock, 
-  Menu as MenuIcon, 
-  X, 
-  ChevronRight, 
-  Utensils, 
-  Camera,
-  MessageCircle,
-  ShoppingCart,
-  Plus,
-  Minus,
-  Trash2,
-  Send,
-  Star,
-  Receipt,
-  Printer,
-  Facebook,
-  Twitter
-} from 'lucide-react';
-
-const Logo = ({ className = "w-12 h-12", light = false }) => (
-  <div className={`relative ${className} flex items-center justify-center`}>
-    <svg viewBox="0 0 100 100" className="w-full h-full">
-      <circle cx="50" cy="50" r="48" fill={light ? "#FDF8F5" : "#3C2A21"} stroke={light ? "#3C2A21" : "#FDF8F5"} strokeWidth="2" />
-      <circle cx="50" cy="50" r="44" fill="none" stroke={light ? "#3C2A21" : "#FDF8F5"} strokeWidth="0.5" />
-      {/* Stylized Coffee Cup */}
-      <path d="M25 45 Q25 35 35 35 Q45 35 45 45 Q45 55 35 55 Q25 55 25 45" fill="none" stroke={light ? "#3C2A21" : "#FDF8F5"} strokeWidth="2" />
-      <path d="M28 42 Q35 42 42 42" fill="none" stroke={light ? "#3C2A21" : "#FDF8F5"} strokeWidth="1" />
-      {/* Stylized Tent/House */}
-      <path d="M55 45 L70 30 L85 45" fill="none" stroke={light ? "#3C2A21" : "#FDF8F5"} strokeWidth="2" />
-      <rect x="68" y="38" width="4" height="4" fill={light ? "#3C2A21" : "#FDF8F5"} />
-      {/* Text Path Placeholder Style */}
-      <text x="50" y="75" textAnchor="middle" fill={light ? "#3C2A21" : "#FDF8F5"} style={{ fontSize: '12px', fontWeight: '900', fontFamily: 'serif' }}>SERATA</text>
-      <text x="50" y="85" textAnchor="middle" fill={light ? "#3C2A21" : "#FDF8F5"} style={{ fontSize: '5px', letterSpacing: '1px' }}>coffee & camp</text>
-    </svg>
-  </div>
-);
-
-const App = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isWAPopupOpen, setIsWAPopupOpen] = useState(false);
-  const [waMessage, setWaMessage] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [tableNumber, setTableNumber] = useState("");
-  const [showReceipt, setShowReceipt] = useState(false);
-  
-  const [testiName, setTestiName] = useState("");
-  const [testiMsg, setTestiMsg] = useState("");
-  const [testiRating, setTestiRating] = useState(5);
-
-  const adminWA = "6287817014194";
-
-  const [testimonials, setTestimonials] = useState([
-    { id: 1, name: "Andi Wijaya", text: "Kopinya enak banget, suasananya bener-bener kayak lagi camping di gunung!", rating: 5 },
-    { id: 2, name: "Siti Sarah", text: "Tempat favorit buat healing akhir pekan. Grilled platternya juara!", rating: 5 },
-    { id: 3, name: "Budi Santoso", text: "Pelayanan ramah dan tempatnya estetik buat foto-foto.", rating: 4 },
-  ]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const navLinks = [
-    { name: 'Beranda', href: '#home' },
-    { name: 'Menu', href: '#menu' },
-    { name: 'Testimoni', href: '#testimonials' },
-    { name: 'Kontak', href: '#contact' },
-  ];
-
-  const menuItems = [
-    { id: 1, name: "Serata Signature Latte", price: 28000, desc: "Kopi susu khas Serata dengan sentuhan gula aren pilihan.", category: "Kopi", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=400" },
-    { id: 2, name: "Manual Brew V60", price: 25000, desc: "Biji kopi single origin yang diseduh dengan presisi.", category: "Kopi", img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=400" },
-    { id: 3, name: "Espresso Double", price: 18000, desc: "Ekstraksi kopi murni yang kuat dan berkarakter.", category: "Kopi", img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400" },
-    { id: 4, name: "Forest Berry Tea", price: 22000, desc: "Teh buah beri yang menyegarkan di tengah udara sejuk.", category: "Teh", img: "https://images.unsplash.com/photo-1544787210-2211d44b505b?auto=format&fit=crop&q=80&w=400" },
-    { id: 5, name: "Chamomile Zen", price: 20000, desc: "Teh bunga krisan yang menenangkan jiwa.", category: "Teh", img: "https://images.unsplash.com/photo-1594631252845-29fc458631b6?auto=format&fit=crop&q=80&w=400" },
-    { id: 6, name: "Iced Matcha Latte", price: 26000, desc: "Matcha premium dengan susu segar dan es batu.", category: "Es", img: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&q=80&w=400" },
-    { id: 7, name: "Chocolate Lava Ice", price: 24000, desc: "Cokelat pekat dingin dengan topping saus cokelat melimpah.", category: "Es", img: "https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&q=80&w=400" },
-    { id: 8, name: "Grilled Platter", price: 45000, desc: "Sosis, nugget, dan kentang goreng, cocok untuk teman camping.", category: "Snack", img: "https://images.unsplash.com/photo-1541510912109-224620b9e495?auto=format&fit=crop&q=80&w=400" },
-    { id: 9, name: "French Fries BBQ", price: 20000, desc: "Kentang goreng renyah dengan bumbu BBQ gurih.", category: "Snack", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=400" },
-    { id: 10, name: "Butter Croissant", price: 18000, desc: "Roti croissant mentega yang lembut dan berlapis.", category: "Snack", img: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=400" },
-  ];
-
-  const addToCart = (item) => {
-    const existing = cart.find(i => i.id === item.id);
-    if (existing) {
-      setCart(cart.map(i => i.id === item.id ? { ...i, qty: i.qty + 1 } : i));
-    } else {
-      setCart([...cart, { ...item, qty: 1 }]);
-    }
-  };
-
-  const removeFromCart = (id) => setCart(cart.filter(i => i.id !== id));
-  
-  const updateQty = (id, delta) => {
-    setCart(cart.map(i => i.id === id ? { ...i, qty: Math.max(1, i.qty + delta) } : i));
-  };
-
-  const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-  const formatPrice = (price) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
-
-  const handleOrderWhatsApp = () => {
-    if (!customerName || !tableNumber) {
-      document.getElementById('name-input')?.focus();
-      return;
-    }
-    
-    let message = `*PESANAN BARU - SERATA COFFEE*\n`;
-    message += `----------------------------\n`;
-    message += `Nama: ${customerName}\n`;
-    message += `Meja: ${tableNumber}\n`;
-    message += `----------------------------\n`;
-    cart.forEach(item => {
-      message += `- ${item.name} (${item.qty}x) : ${formatPrice(item.price * item.qty)}\n`;
-    });
-    message += `----------------------------\n`;
-    message += `*Total: ${formatPrice(totalPrice)}*\n\n`;
-    message += `Mohon diproses, terima kasih!`;
-    
-    window.open(`https://wa.me/${adminWA}?text=${encodeURIComponent(message)}`, '_blank');
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleSubmitTestimonial = (e) => {
-    e.preventDefault();
-    if (!testiName || !testiMsg) return;
-    const newTesti = {
-      id: Date.now(),
-      name: testiName,
-      text: testiMsg,
-      rating: testiRating
-    };
-    setTestimonials([newTesti, ...testimonials]);
-    setTestiName("");
-    setTestiMsg("");
-  };
-
-  return (
-    <div className="min-h-screen bg-[#FDF8F5] text-[#3C2A21] font-sans">
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 no-print ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-3' : 'bg-transparent py-5'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <Logo className="w-10 h-10" light={scrolled} />
-            <span className={`text-xl font-bold tracking-tight ${scrolled ? 'text-[#3C2A21]' : 'text-white'}`}>
-              SERATA
-            </span>
-          </div>
-
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a key={link.name} href={link.href} className={`font-medium transition-colors hover:text-[#8B4513] ${scrolled ? 'text-[#3C2A21]' : 'text-white'}`}>{link.name}</a>
-            ))}
-            <button onClick={() => setIsCartOpen(true)} className="relative bg-[#3C2A21] text-white p-2.5 rounded-full hover:bg-[#5D4037] transition-all flex items-center justify-center shadow-lg">
-              <ShoppingCart className="w-5 h-5" />
-              {cart.length > 0 && <span className="absolute -top-1 -right-1 bg-[#8B4513] text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">{cart.reduce((a, b) => a + b.qty, 0)}</span>}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4 md:hidden">
-            <button onClick={() => setIsCartOpen(true)} className="relative"><ShoppingCart className={`w-7 h-7 ${scrolled ? 'text-[#3C2A21]' : 'text-white'}`} />{cart.length > 0 && <span className="absolute -top-2 -right-2 bg-[#8B4513] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">{cart.reduce((a, b) => a + b.qty, 0)}</span>}</button>
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X className="w-8 h-8" /> : <MenuIcon className={`w-8 h-8 ${scrolled ? 'text-[#3C2A21]' : 'text-white'}`} />}</button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <header id="home" className="relative h-screen flex items-center justify-center overflow-hidden no-print">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1920" 
-            alt="Suasana Serata Coffee" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/60"></div>
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-6 max-w-4xl animate-fade-in-up">
-          <div className="flex justify-center mb-6">
-            <Logo className="w-24 h-24" />
-          </div>
-          <p className="text-[#D7CCC8] font-bold uppercase tracking-widest mb-4">Coffee & Camping Experience</p>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight serif">Seduh Kopi di <br/> Dekapan Alam</h1>
-          <p className="text-lg md:text-xl mb-8 text-[#EFEBE9] max-w-2xl mx-auto">Sensasi ngopi dengan konsep camping yang sejuk dan menenangkan. Pesan menu favoritmu langsung dari sini.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#menu" className="bg-[#3C2A21] hover:bg-[#5D4037] text-white px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-xl"><Coffee className="w-5 h-5" /> Pesan Sekarang</a>
-            <a href="#testimonials" className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2">Ulasan Kami</a>
-          </div>
-        </div>
-      </header>
-
-      {/* Menu Section */}
-      <section id="menu" className="py-24 bg-[#F5EBE0] no-print">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-[#8B4513] font-bold uppercase tracking-wider">Pilihan Menu</span>
-            <h2 className="text-4xl font-bold mt-2 text-[#3C2A21] serif">Cita Rasa Serata</h2>
-          </div>
-
-          <div className="space-y-16">
-            {['Kopi', 'Teh', 'Es', 'Snack'].map(category => (
-              <div key={category}>
-                <div className="flex items-center gap-4 mb-8">
-                  <h3 className="text-2xl font-bold text-[#5D4037]">{category === 'Es' ? 'Minuman Dingin' : category}</h3>
-                  <div className="flex-grow h-px bg-[#D7CCC8]"></div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {menuItems.filter(i => i.category === category).map((item) => (
-                    <div key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col border border-[#EFEBE9]">
-                      <div className="h-48 overflow-hidden relative">
-                        <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        <div className="absolute top-4 right-4 bg-[#3C2A21]/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm">{formatPrice(item.price)}</div>
-                      </div>
-                      <div className="p-6 flex flex-col flex-grow">
-                        <h4 className="text-lg font-bold mb-2 text-[#3C2A21]">{item.name}</h4>
-                        <p className="text-[#8D6E63] text-sm mb-6 line-clamp-2">{item.desc}</p>
-                        <button onClick={() => addToCart(item)} className="mt-auto w-full bg-[#FDF8F5] text-[#3C2A21] py-3 rounded-2xl border border-[#D7CCC8] font-bold hover:bg-[#3C2A21] hover:text-white transition-all flex items-center justify-center gap-2 shadow-sm"><Plus className="w-4 h-4" /> Tambah</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 px-6 max-w-7xl mx-auto no-print">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-          <div>
-            <span className="text-[#8B4513] font-bold uppercase tracking-wider">Testimoni</span>
-            <h2 className="text-4xl font-bold mt-2 mb-6 text-[#3C2A21] serif">Cerita Pengunjung</h2>
-            <div className="space-y-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
-              {testimonials.map((testi) => (
-                <div key={testi.id} className="bg-white p-6 rounded-3xl shadow-sm border border-[#EFEBE9]">
-                  <div className="flex text-[#8B4513] mb-2">
-                    {[...Array(testi.rating)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
-                  </div>
-                  <p className="text-[#5D4037] text-sm mb-4 italic">"{testi.text}"</p>
-                  <h4 className="font-bold text-[#3C2A21] text-sm">- {testi.name}</h4>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="bg-[#3C2A21] text-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-            <div className="absolute -top-10 -right-10 opacity-5"><Logo className="w-64 h-64" /></div>
-            <h3 className="text-2xl font-bold mb-6 relative z-10 serif">Bagi Pengalamanmu</h3>
-            <form onSubmit={handleSubmitTestimonial} className="space-y-4 relative z-10">
-              <div>
-                <label className="block text-xs font-bold uppercase mb-2 opacity-70">Nama Lengkap</label>
-                <input value={testiName} onChange={(e) => setTestiName(e.target.value)} type="text" className="w-full bg-white/5 border border-white/10 rounded-xl p-3 focus:bg-white/10 outline-none transition-all" placeholder="Nama Anda..." required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase mb-2 opacity-70">Rating</label>
-                <div className="flex gap-2">
-                  {[1,2,3,4,5].map(num => (
-                    <button key={num} type="button" onClick={() => setTestiRating(num)} className={`p-2 rounded-lg transition-all ${testiRating >= num ? 'bg-[#8B4513] text-white' : 'bg-white/10 text-[#D7CCC8]'}`}><Star className="w-4 h-4 fill-current" /></button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase mb-2 opacity-70">Kesan & Pesan</label>
-                <textarea value={testiMsg} onChange={(e) => setTestiMsg(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl p-3 h-32 focus:bg-white/10 outline-none transition-all resize-none" placeholder="Tuliskan ulasanmu..." required />
-              </div>
-              <button type="submit" className="w-full bg-[#D7CCC8] text-[#3C2A21] py-4 rounded-2xl font-bold hover:bg-white transition-all shadow-lg">Kirim Ulasan</button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      {/* Cart Drawer */}
-      {isCartOpen && (
-        <div className="fixed inset-0 z-[60] flex justify-end no-print">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setIsCartOpen(false)}></div>
-          <div className="relative w-full max-w-md bg-white h-full flex flex-col shadow-2xl animate-slide-in-right">
-            <div className="p-6 border-b flex justify-between items-center bg-[#FDF8F5]">
-              <h2 className="text-2xl font-bold flex items-center gap-2 text-[#3C2A21] serif"><ShoppingCart className="text-[#8B4513]" /> Pesanan Anda</h2>
-              <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-[#F5EBE0] rounded-full transition-all shadow-sm text-[#3C2A21]"><X /></button>
-            </div>
-            
-            <div className="flex-grow overflow-y-auto p-6 space-y-6 bg-white">
-              {cart.length === 0 ? (
-                <div className="text-center py-20 opacity-30 flex flex-col items-center">
-                  <Coffee size={64} className="mb-4 text-[#3C2A21]" />
-                  <p className="font-medium text-[#3C2A21]">Belum ada pesanan nih..</p>
-                </div>
-              ) : (
-                cart.map(item => (
-                  <div key={item.id} className="flex gap-4 items-center border-b border-[#F5EBE0] pb-6">
-                    <img src={item.img} className="w-16 h-16 rounded-2xl object-cover shadow-md" />
-                    <div className="flex-grow">
-                      <h4 className="font-bold text-sm text-[#3C2A21]">{item.name}</h4>
-                      <p className="text-[#8B4513] font-bold text-xs">{formatPrice(item.price)}</p>
-                      <div className="flex items-center gap-3 mt-2">
-                        <button onClick={() => updateQty(item.id, -1)} className="p-1.5 border border-[#D7CCC8] rounded-lg hover:bg-[#F5EBE0]"><Minus size={12} /></button>
-                        <span className="text-sm font-bold w-4 text-center">{item.qty}</span>
-                        <button onClick={() => updateQty(item.id, 1)} className="p-1.5 border border-[#D7CCC8] rounded-lg hover:bg-[#F5EBE0]"><Plus size={12} /></button>
-                      </div>
-                    </div>
-                    <button onClick={() => removeFromCart(item.id)} className="text-[#8B4513] hover:text-[#3C2A21] transition-colors"><Trash2 size={20} /></button>
-                  </div>
-                ))
-              )}
-            </div>
-            
-            <div className="p-6 border-t bg-[#FDF8F5] space-y-4 shadow-inner">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase text-[#8D6E63] mb-1">Nama Pemesan</label>
-                  <input id="name-input" type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Nama..." className="w-full p-3 rounded-xl border border-[#D7CCC8] text-sm focus:ring-2 focus:ring-[#3C2A21] outline-none" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold uppercase text-[#8D6E63] mb-1">Meja No.</label>
-                  <input type="number" value={tableNumber} onChange={(e) => setTableNumber(e.target.value)} placeholder="00" className="w-full p-3 rounded-xl border border-[#D7CCC8] text-sm focus:ring-2 focus:ring-[#3C2A21] outline-none" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center py-2 border-y border-[#D7CCC8]">
-                <span className="font-bold text-[#5D4037]">Total</span>
-                <span className="text-2xl font-bold text-[#3C2A21]">{formatPrice(totalPrice)}</span>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <button disabled={cart.length === 0} onClick={() => setShowReceipt(true)} className="bg-[#D7CCC8] text-[#3C2A21] py-4 rounded-2xl font-bold hover:bg-[#BCAAA4] transition-all flex items-center justify-center gap-2 disabled:opacity-50"><Receipt size={18} /> Struk</button>
-                <button disabled={cart.length === 0} onClick={handleOrderWhatsApp} className="bg-[#3C2A21] text-white py-4 rounded-2xl font-bold hover:bg-[#5D4037] transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"><Send size={18} /> Kirim WA</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Digital Receipt Modal */}
-      {showReceipt && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 receipt-overlay">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-md no-print" onClick={() => setShowReceipt(false)}></div>
-          <div className="relative bg-white w-full max-w-sm rounded-[2rem] overflow-hidden animate-fade-in shadow-2xl receipt-container border border-[#3C2A21]">
-            <div className="bg-[#3C2A21] text-white p-6 text-center receipt-header">
-              <Logo className="w-16 h-16 mx-auto mb-3" />
-              <h3 className="font-bold text-lg uppercase tracking-widest serif">Serata Coffee</h3>
-              <p className="text-[10px] opacity-70">Bukti Pesanan Digital</p>
-            </div>
-            <div className="p-8 space-y-4 receipt-body bg-[#FDF8F5]">
-              <div className="flex justify-between text-xs border-b border-[#3C2A21] border-dashed pb-4 text-[#5D4037]">
-                <span>Meja: <b className="text-[#3C2A21]">{tableNumber}</b></span>
-                <span>Atas Nama: <b className="text-[#3C2A21] uppercase">{customerName}</b></span>
-              </div>
-              <div className="space-y-3 pt-2">
-                {cart.map(item => (
-                  <div key={item.id} className="flex justify-between text-sm text-[#3C2A21]">
-                    <span>{item.name} x{item.qty}</span>
-                    <span className="font-medium">{formatPrice(item.price * item.qty)}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t border-[#3C2A21] border-dashed pt-4 mt-6">
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-[#5D4037]">TOTAL</span>
-                  <span className="text-xl font-bold text-[#3C2A21]">{formatPrice(totalPrice)}</span>
-                </div>
-              </div>
-              <div className="pt-8 text-center no-print">
-                <div className="bg-[#F5EBE0] p-4 rounded-2xl text-[10px] text-[#5D4037] mb-6">
-                  Tunjukkan struk ini di kasir untuk <br/> proses pesanan & pembayaran.
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                   <button onClick={handlePrint} className="bg-[#3C2A21] text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm"><Printer size={16} /> Cetak</button>
-                   <button onClick={() => setShowReceipt(false)} className="bg-[#D7CCC8] text-[#3C2A21] py-3 rounded-xl font-bold shadow-sm">Tutup</button>
-                </div>
-              </div>
-            </div>
-            <div className="h-4 bg-white flex overflow-hidden">
-               {[...Array(20)].map((_, i) => <div key={i} className="w-4 h-4 rounded-full bg-[#3C2A21] -mb-2"></div>)}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Floating WhatsApp Action */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 no-print">
-        {isWAPopupOpen && (
-          <div className="bg-white rounded-3xl shadow-2xl p-6 w-80 border border-[#F5EBE0] animate-fade-in-up">
-            <div className="flex items-center gap-3 mb-4 border-b pb-4">
-              <div className="w-12 h-12 bg-[#3C2A21] rounded-full flex items-center justify-center shadow-inner"><Logo className="w-10 h-10" /></div>
-              <div>
-                <h4 className="font-bold text-sm text-[#3C2A21]">Admin Serata</h4>
-                <p className="text-[10px] text-[#8B4513] flex items-center gap-1"><span className="w-1.5 h-1.5 bg-[#8B4513] rounded-full animate-pulse"></span> Sedang online</p>
-              </div>
-              <button onClick={() => setIsWAPopupOpen(false)} className="ml-auto p-1 hover:bg-[#F5EBE0] rounded-full text-[#3C2A21]"><X size={16} /></button>
-            </div>
-            <textarea value={waMessage} onChange={(e) => setWaMessage(e.target.value)} placeholder="Ada yang bisa kami bantu?" className="w-full h-24 p-4 bg-[#FDF8F5] rounded-2xl text-sm border-none focus:ring-1 focus:ring-[#3C2A21] outline-none resize-none mb-3 text-[#3C2A21]" />
-            <button onClick={() => { if(waMessage) window.open(`https://wa.me/${adminWA}?text=${encodeURIComponent(waMessage)}`, '_blank'); setIsWAPopupOpen(false); setWaMessage(""); }} className="w-full bg-[#3C2A21] text-white py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#5D4037] transition-all shadow-lg">Kirim Pesan <Send size={14} /></button>
-          </div>
-        )}
-        <button onClick={() => setIsWAPopupOpen(!isWAPopupOpen)} className="bg-[#3C2A21] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center relative group">
-          <MessageCircle className="w-7 h-7" />
-        </button>
-      </div>
-
-      {/* Footer Section */}
-      <footer id="contact" className="bg-[#2D1B14] text-[#EFEBE9] py-20 px-6 no-print">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
-          <div className="md:col-span-2">
-             <div className="flex items-center justify-center md:justify-start gap-3 mb-6">
-                <Logo className="w-12 h-12" />
-                <span className="text-2xl font-bold tracking-tight serif">SERATA</span>
-              </div>
-              <p className="text-[#D7CCC8]/60 max-w-sm mb-8 mx-auto md:mx-0">Rumah bagi para pencari ketenangan. Nikmati harmoni kopi pilihan di tengah suasana camping yang asri.</p>
-              <div className="flex justify-center md:justify-start gap-4">
-                <a href="#" className="bg-white/5 p-3 rounded-full hover:bg-[#8B4513] transition-all"><Instagram size={20} /></a>
-                <a href="#" className="bg-white/5 p-3 rounded-full hover:bg-[#8B4513] transition-all"><Facebook size={20} /></a>
-                <a href="#" className="bg-white/5 p-3 rounded-full hover:bg-[#8B4513] transition-all"><Twitter size={20} /></a>
-              </div>
-          </div>
-          
-          <div>
-            <h4 className="font-bold text-lg mb-6 text-[#D7CCC8] serif">Kontak</h4>
-            <ul className="space-y-4 text-[#D7CCC8]/70">
-              <li className="flex items-center justify-center md:justify-start gap-2"><MapPin size={16} className="text-[#8B4513]" /> Jl. Raya Puncak, Bogor</li>
-              <li className="flex items-center justify-center md:justify-start gap-2"><Clock size={16} className="text-[#8B4513]" /> 09:00 - 22:00 WIB</li>
-              <li className="flex items-center justify-center md:justify-start gap-2"><MessageCircle size={16} className="text-[#8B4513]" /> 0878-1701-4194</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-bold text-lg mb-6 text-[#D7CCC8] serif">Tautan</h4>
-            <ul className="space-y-4 text-[#D7CCC8]/70">
-              <li><a href="#home" className="hover:text-white transition-colors">Beranda</a></li>
-              <li><a href="#menu" className="hover:text-white transition-colors">Menu</a></li>
-              <li><a href="#testimonials" className="hover:text-white transition-colors">Ulasan</a></li>
-              <li><a href="#contact" className="hover:text-white transition-colors">Hubungi Kami</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-[#D7CCC8]/40">
-          <p>© 2026 Serata Coffee & Camp. Didesain dengan penuh kehangatan.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-[#D7CCC8] transition-colors">Privacy</a>
-            <a href="#" className="hover:text-[#D7CCC8] transition-colors">Terms</a>
-          </div>
-        </div>
-      </footer>
-
-      <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap');
-        
-        body { font-family: 'Inter', sans-serif; }
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serata Coffee & Camp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .serif { font-family: 'Playfair Display', serif; }
-        
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
-        .animate-slide-in-right { animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #D7CCC8; border-radius: 10px; }
-
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        
         @media print {
-          .no-print { display: none !important; }
-          body { background: white !important; }
-          .receipt-overlay { 
-            position: absolute !important;
-            background: white !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            display: block !important;
-          }
-          .receipt-container {
-            box-shadow: none !important;
-            border: 1px solid #3C2A21 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            margin: 0 !important;
-            border-radius: 0 !important;
-          }
-          .receipt-header {
-            background: #3C2A21 !important;
-            -webkit-print-color-adjust: exact;
-          }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white !important; }
         }
-      ` }} />
-    </div>
-  );
-};
 
-export default App;
+        #wa-popup.hidden { display: none; }
+    </style>
+</head>
+<body class="bg-[#FDF8F5] text-[#3C2A21]">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 no-print py-5 bg-transparent">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div id="logo-container" class="w-10 h-10">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <circle cx="50" cy="50" r="48" fill="#3C2A21" stroke="#FDF8F5" stroke-width="2" />
+                        <path d="M25 45 Q25 35 35 35 Q45 35 45 45 Q45 55 35 55 Q25 55 25 45" fill="none" stroke="#FDF8F5" stroke-width="2" />
+                        <path d="M55 45 L70 30 L85 45" fill="none" stroke="#FDF8F5" stroke-width="2" />
+                        <text x="50" y="75" text-anchor="middle" fill="#FDF8F5" style="font-size: 12px; font-weight: 900; font-family: serif;">SERATA</text>
+                    </svg>
+                </div>
+                <span id="nav-brand" class="text-xl font-bold tracking-tight text-white transition-colors">SERATA</span>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="nav-link font-medium text-white hover:text-[#D7CCC8] transition-colors">Beranda</a>
+                <a href="#menu" class="nav-link font-medium text-white hover:text-[#D7CCC8] transition-colors">Menu</a>
+                <a href="#testimonials" class="nav-link font-medium text-white hover:text-[#D7CCC8] transition-colors">Testimoni</a>
+                <a href="#contact" class="nav-link font-medium text-white hover:text-[#D7CCC8] transition-colors">Kontak</a>
+                <button onclick="toggleCart()" class="relative bg-[#3C2A21] text-white p-2.5 rounded-full hover:bg-[#5D4037] transition-all shadow-lg">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    <span id="cart-count" class="hidden absolute -top-1 -right-1 bg-[#8B4513] text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">0</span>
+                </button>
+            </div>
+
+            <div class="flex items-center gap-4 md:hidden">
+                <button onclick="toggleCart()" class="relative text-white" id="mobile-cart-btn">
+                    <i data-lucide="shopping-cart" class="w-7 h-7"></i>
+                    <span id="cart-count-mobile" class="hidden absolute -top-2 -right-2 bg-[#8B4513] text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="text-white" id="mobile-menu-btn">
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center gap-8 text-2xl font-semibold hidden no-print">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-[#3C2A21]">
+            <i data-lucide="x" class="w-10 h-10"></i>
+        </button>
+        <a href="#home" onclick="toggleMobileMenu()" class="hover:text-[#8B4513]">Beranda</a>
+        <a href="#menu" onclick="toggleMobileMenu()" class="hover:text-[#8B4513]">Menu</a>
+        <a href="#testimonials" onclick="toggleMobileMenu()" class="hover:text-[#8B4513]">Testimoni</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-[#8B4513]">Kontak</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden no-print">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1920" alt="Suasana Serata Coffee" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/60"></div>
+        </div>
+        <div class="relative z-10 text-center text-white px-6 max-w-4xl animate-fade-in-up">
+            <div class="flex justify-center mb-6">
+                <div class="w-24 h-24">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <circle cx="50" cy="50" r="48" fill="#3C2A21" stroke="#FDF8F5" stroke-width="2" />
+                        <circle cx="50" cy="50" r="44" fill="none" stroke="#FDF8F5" stroke-width="0.5" />
+                        <path d="M25 45 Q25 35 35 35 Q45 35 45 45 Q45 55 35 55 Q25 55 25 45" fill="none" stroke="#FDF8F5" stroke-width="2" />
+                        <path d="M28 42 Q35 42 42 42" fill="none" stroke="#FDF8F5" stroke-width="1" />
+                        <path d="M55 45 L70 30 L85 45" fill="none" stroke="#FDF8F5" stroke-width="2" />
+                        <rect x="68" y="38" width="4" height="4" fill="#FDF8F5" />
+                        <text x="50" y="75" text-anchor="middle" fill="#FDF8F5" style="font-size: 12px; font-weight: 900; font-family: serif;">SERATA</text>
+                        <text x="50" y="85" text-anchor="middle" fill="#FDF8F5" style="font-size: 5px; letter-spacing: 1px;">coffee & camp</text>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-[#D7CCC8] font-bold uppercase tracking-widest mb-4">Coffee & Camping Experience</p>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight serif">Seduh Kopi di <br> Dekapan Alam</h1>
+            <p class="text-lg md:text-xl mb-8 text-[#EFEBE9] max-w-2xl mx-auto">Sensasi ngopi dengan konsep camping yang sejuk dan menenangkan. Pesan menu favoritmu langsung dari sini.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#menu" class="bg-[#3C2A21] hover:bg-[#5D4037] text-white px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-xl">
+                    <i data-lucide="coffee" class="w-5 h-5"></i> Pesan Sekarang
+                </a>
+                <a href="#testimonials" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-4 rounded-full font-bold text-lg transition-all">Ulasan Kami</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-24 bg-[#F5EBE0] no-print">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <span class="text-[#8B4513] font-bold uppercase tracking-wider">Pilihan Menu</span>
+            <h2 class="text-4xl font-bold mt-2 text-[#3C2A21] serif mb-16">Cita Rasa Serata</h2>
+            <div id="menu-container" class="space-y-16 text-left">
+                <!-- Categories will be injected here by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 px-6 max-w-7xl mx-auto no-print">
+        <div class="grid md:grid-cols-2 gap-16 items-start">
+            <div>
+                <span class="text-[#8B4513] font-bold uppercase tracking-wider">Testimoni</span>
+                <h2 class="text-4xl font-bold mt-2 mb-6 text-[#3C2A21] serif">Cerita Pengunjung</h2>
+                <div id="testimonials-list" class="space-y-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                    <!-- Testimonials injected here -->
+                </div>
+            </div>
+            <div class="bg-[#3C2A21] text-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+                <h3 class="text-2xl font-bold mb-6 relative z-10 serif">Bagi Pengalamanmu</h3>
+                <form id="testi-form" class="space-y-4 relative z-10">
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-2 opacity-70">Nama Lengkap</label>
+                        <input id="testi-name" type="text" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 focus:bg-white/10 outline-none transition-all" placeholder="Nama Anda..." required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-2 opacity-70">Rating</label>
+                        <select id="testi-rating" class="w-full bg-[#3C2A21] border border-white/10 rounded-xl p-3 outline-none">
+                            <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                            <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                            <option value="3">⭐⭐⭐ (3/5)</option>
+                            <option value="2">⭐⭐ (2/5)</option>
+                            <option value="1">⭐ (1/5)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase mb-2 opacity-70">Kesan & Pesan</label>
+                        <textarea id="testi-msg" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 h-32 focus:bg-white/10 outline-none transition-all resize-none" placeholder="Tuliskan ulasanmu..." required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-[#D7CCC8] text-[#3C2A21] py-4 rounded-2xl font-bold hover:bg-white transition-all shadow-lg">Kirim Ulasan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-[#2D1B14] text-[#EFEBE9] py-20 px-6 no-print">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
+            <div class="md:col-span-2">
+                <div class="flex items-center justify-center md:justify-start gap-3 mb-6 font-bold text-2xl serif">SERATA</div>
+                <p class="text-[#D7CCC8]/60 max-w-sm mb-8 mx-auto md:mx-0">Rumah bagi para pencari ketenangan. Nikmati harmoni kopi pilihan di tengah suasana camping yang asri.</p>
+                <div class="flex justify-center md:justify-start gap-4">
+                    <a href="#" class="bg-white/5 p-3 rounded-full hover:bg-[#8B4513] transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="bg-white/5 p-3 rounded-full hover:bg-[#8B4513] transition-all"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-6 text-[#D7CCC8] serif">Kontak</h4>
+                <p class="text-[#D7CCC8]/70 text-sm">Jl. Raya Puncak, Bogor<br>09:00 - 22:00 WIB<br>0878-1701-4194</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-6 text-[#D7CCC8] serif">Tautan</h4>
+                <ul class="space-y-4 text-[#D7CCC8]/70 text-sm">
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#testimonials">Ulasan</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-0 z-[70] flex justify-end hidden no-print">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="relative w-full max-w-md bg-white h-full flex flex-col shadow-2xl">
+            <div class="p-6 border-b flex justify-between items-center bg-[#FDF8F5]">
+                <h2 class="text-2xl font-bold flex items-center gap-2 text-[#3C2A21] serif"><i data-lucide="shopping-cart"></i> Pesanan Anda</h2>
+                <button onclick="toggleCart()" class="p-2 hover:bg-[#F5EBE0] rounded-full text-[#3C2A21]"><i data-lucide="x"></i></button>
+            </div>
+            <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-6 bg-white">
+                <!-- Cart items injected here -->
+            </div>
+            <div class="p-6 border-t bg-[#FDF8F5] space-y-4 shadow-inner">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-[#8D6E63] mb-1">Nama Pemesan</label>
+                        <input id="customer-name" type="text" placeholder="Nama..." class="w-full p-3 rounded-xl border border-[#D7CCC8] text-sm focus:ring-2 focus:ring-[#3C2A21] outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-[#8D6E63] mb-1">Meja No.</label>
+                        <input id="table-number" type="number" placeholder="00" class="w-full p-3 rounded-xl border border-[#D7CCC8] text-sm focus:ring-2 focus:ring-[#3C2A21] outline-none">
+                    </div>
+                </div>
+                <div class="flex justify-between items-center py-2 border-y border-[#D7CCC8]">
+                    <span class="font-bold text-[#5D4037]">Total</span>
+                    <span id="cart-total" class="text-2xl font-bold text-[#3C2A21]">Rp 0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="showReceiptModal()" class="bg-[#D7CCC8] text-[#3C2A21] py-4 rounded-2xl font-bold hover:bg-[#BCAAA4] transition-all flex items-center justify-center gap-2"><i data-lucide="receipt"></i> Struk</button>
+                    <button onclick="orderViaWA()" class="bg-[#3C2A21] text-white py-4 rounded-2xl font-bold hover:bg-[#5D4037] transition-all flex items-center justify-center gap-2 shadow-lg"><i data-lucide="send"></i> Kirim WA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div id="receipt-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md no-print" onclick="hideReceiptModal()"></div>
+        <div class="relative bg-white w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border border-[#3C2A21]">
+            <div id="receipt-capture-area">
+                <div class="bg-[#3C2A21] text-white p-6 text-center">
+                    <h3 class="font-bold text-lg uppercase tracking-widest serif">Serata Coffee</h3>
+                    <p class="text-[10px] opacity-70">Bukti Pesanan Digital</p>
+                </div>
+                <div class="p-8 space-y-4 bg-[#FDF8F5]">
+                    <div class="flex justify-between text-xs border-b border-[#3C2A21] border-dashed pb-4 text-[#5D4037]">
+                        <span>Meja: <b id="r-table" class="text-[#3C2A21]">-</b></span>
+                        <span>Nama: <b id="r-name" class="text-[#3C2A21] uppercase">-</b></span>
+                    </div>
+                    <div id="r-items" class="space-y-3 pt-2">
+                        <!-- Items injected here -->
+                    </div>
+                    <div class="border-t border-[#3C2A21] border-dashed pt-4 mt-6">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-[#5D4037]">TOTAL</span>
+                            <span id="r-total" class="text-xl font-bold text-[#3C2A21]">Rp 0</span>
+                        </div>
+                    </div>
+                    <div class="pt-4 text-center text-[8px] text-[#8D6E63] italic">
+                        Tunjukkan struk ini ke kasir. Terima kasih!
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-white border-t space-y-3 no-print">
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="window.print()" class="bg-[#3C2A21] text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> Cetak</button>
+                    <button onclick="downloadAsImage()" class="bg-white text-[#3C2A21] border border-[#3C2A21] py-3 rounded-xl font-bold flex items-center justify-center gap-2"><i data-lucide="download" class="w-4 h-4"></i> Gambar</button>
+                </div>
+                <button onclick="hideReceiptModal()" class="w-full bg-[#D7CCC8] text-[#3C2A21] py-3 rounded-xl font-bold">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Button & Popup -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 no-print">
+        <!-- WA Popup Message -->
+        <div id="wa-popup" class="hidden bg-white rounded-3xl shadow-2xl p-6 w-80 border border-[#F5EBE0] animate-fade-in-up">
+            <div class="flex items-center gap-3 mb-4 border-b pb-4">
+                <div class="w-12 h-12 bg-[#3C2A21] rounded-full flex items-center justify-center shadow-inner">
+                    <svg viewBox="0 0 100 100" class="w-10 h-10">
+                        <circle cx="50" cy="50" r="48" fill="#3C2A21" stroke="#FDF8F5" stroke-width="2" />
+                        <path d="M25 45 Q25 35 35 35 Q45 35 45 45 Q45 55 35 55 Q25 55 25 45" fill="none" stroke="#FDF8F5" stroke-width="2" />
+                        <path d="M55 45 L70 30 L85 45" fill="none" stroke="#FDF8F5" stroke-width="2" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-[#3C2A21]">Admin Serata</h4>
+                    <p class="text-[10px] text-[#8B4513] flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-[#8B4513] rounded-full animate-pulse"></span> Sedang online
+                    </p>
+                </div>
+                <button onclick="toggleWAPopup()" class="ml-auto p-1 hover:bg-[#F5EBE0] rounded-full text-[#3C2A21]">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <textarea id="wa-message-input" placeholder="Tulis pesan ke admin..." class="w-full h-24 p-4 bg-[#FDF8F5] rounded-2xl text-sm border-none focus:ring-1 focus:ring-[#3C2A21] outline-none resize-none mb-3 text-[#3C2A21]"></textarea>
+            <button onclick="sendDirectWA()" class="w-full bg-[#3C2A21] text-white py-3 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:bg-[#5D4037] transition-all shadow-lg">
+                Kirim Pesan <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Floating Button -->
+        <button onclick="toggleWAPopup()" class="bg-[#3C2A21] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all flex items-center justify-center relative group">
+            <i data-lucide="message-circle" class="w-7 h-7"></i>
+            <span class="absolute right-full mr-4 bg-[#3C2A21] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap pointer-events-none">Tanya Admin?</span>
+        </button>
+    </div>
+
+    <script>
+        // -- DATA --
+        const menuData = [
+            { id: 1, name: "Serata Signature Latte", price: 28000, category: "Kopi", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=400" },
+            { id: 2, name: "Manual Brew V60", price: 25000, category: "Kopi", img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=400" },
+            { id: 4, name: "Forest Berry Tea", price: 22000, category: "Teh", img: "https://images.unsplash.com/photo-1544787210-2211d44b505b?auto=format&fit=crop&q=80&w=400" },
+            { id: 6, name: "Iced Matcha Latte", price: 26000, category: "Es", img: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&q=80&w=400" },
+            { id: 8, name: "Grilled Platter", price: 45000, category: "Snack", img: "https://images.unsplash.com/photo-1541510912109-224620b9e495?auto=format&fit=crop&q=80&w=400" }
+        ];
+
+        let cart = [];
+        let testimonials = [
+            { name: "Andi Wijaya", text: "Kopinya enak banget, suasananya bener-bener kayak lagi camping!", rating: 5 },
+            { name: "Siti Sarah", text: "Tempat favorit buat healing akhir pekan.", rating: 5 }
+        ];
+
+        // -- INITIALIZATION --
+        window.onload = () => {
+            lucide.createIcons();
+            renderMenu();
+            renderTestimonials();
+            updateCartUI();
+        };
+
+        // -- SCROLL HANDLER --
+        window.onscroll = () => {
+            const nav = document.getElementById('navbar');
+            const brand = document.getElementById('nav-brand');
+            const links = document.querySelectorAll('.nav-link');
+            const cartBtn = document.getElementById('mobile-cart-btn');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/95', 'shadow-md', 'py-3');
+                nav.classList.remove('bg-transparent', 'py-5');
+                brand.classList.add('text-[#3C2A21]'); brand.classList.remove('text-white');
+                links.forEach(l => { l.classList.add('text-[#3C2A21]'); l.classList.remove('text-white'); });
+                cartBtn.classList.add('text-[#3C2A21]'); cartBtn.classList.remove('text-white');
+                menuBtn.classList.add('text-[#3C2A21]'); menuBtn.classList.remove('text-white');
+            } else {
+                nav.classList.remove('bg-white/95', 'shadow-md', 'py-3');
+                nav.classList.add('bg-transparent', 'py-5');
+                brand.classList.remove('text-[#3C2A21]'); brand.classList.add('text-white');
+                links.forEach(l => { l.classList.remove('text-[#3C2A21]'); l.classList.add('text-white'); });
+                cartBtn.classList.remove('text-[#3C2A21]'); cartBtn.classList.add('text-white');
+                menuBtn.classList.remove('text-[#3C2A21]'); menuBtn.classList.add('text-white');
+            }
+        };
+
+        // -- RENDERERS --
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            const cats = [...new Set(menuData.map(i => i.category))];
+            
+            container.innerHTML = cats.map(cat => `
+                <div>
+                    <div class="flex items-center gap-4 mb-8">
+                        <h3 class="text-2xl font-bold text-[#5D4037]">${cat}</h3>
+                        <div class="flex-grow h-px bg-[#D7CCC8]"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        ${menuData.filter(i => i.category === cat).map(item => `
+                            <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col border border-[#EFEBE9]">
+                                <img src="${item.img}" class="h-48 w-full object-cover">
+                                <div class="p-6 flex flex-col flex-grow">
+                                    <h4 class="text-lg font-bold text-[#3C2A21]">${item.name}</h4>
+                                    <div class="mt-4 flex justify-between items-center">
+                                        <span class="font-bold text-[#8B4513]">Rp ${item.price.toLocaleString()}</span>
+                                        <button onclick="addToCart(${item.id})" class="bg-[#FDF8F5] text-[#3C2A21] px-4 py-2 rounded-xl border border-[#D7CCC8] hover:bg-[#3C2A21] hover:text-white transition-all">Tambah</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTestimonials() {
+            const list = document.getElementById('testimonials-list');
+            list.innerHTML = testimonials.map(t => `
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-[#EFEBE9]">
+                    <div class="flex text-[#8B4513] mb-2">${'⭐'.repeat(t.rating)}</div>
+                    <p class="text-[#5D4037] text-sm mb-4 italic">"${t.text}"</p>
+                    <h4 class="font-bold text-[#3C2A21] text-sm">- ${t.name}</h4>
+                </div>
+            `).join('');
+        }
+
+        // -- CART LOGIC --
+        function addToCart(id) {
+            const item = menuData.find(i => i.id === id);
+            const exist = cart.find(i => i.id === id);
+            if(exist) exist.qty++;
+            else cart.push({...item, qty: 1});
+            updateCartUI();
+        }
+
+        function updateQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            item.qty += delta;
+            if(item.qty < 1) cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const countEl = document.getElementById('cart-count');
+            const countMobEl = document.getElementById('cart-count-mobile');
+            const totalCount = cart.reduce((a, b) => a + b.qty, 0);
+            
+            if(totalCount > 0) {
+                countEl.innerText = totalCount; countEl.classList.remove('hidden');
+                countMobEl.innerText = totalCount; countMobEl.classList.remove('hidden');
+            } else {
+                countEl.classList.add('hidden');
+                countMobEl.classList.add('hidden');
+            }
+
+            const itemsEl = document.getElementById('cart-items');
+            if(cart.length === 0) {
+                itemsEl.innerHTML = `<div class="text-center py-20 opacity-30">Keranjang kosong..</div>`;
+            } else {
+                itemsEl.innerHTML = cart.map(i => `
+                    <div class="flex gap-4 items-center border-b border-[#F5EBE0] pb-6">
+                        <img src="${i.img}" class="w-16 h-16 rounded-2xl object-cover">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm">${i.name}</h4>
+                            <p class="text-[#8B4513] font-bold text-xs">Rp ${i.price.toLocaleString()}</p>
+                            <div class="flex items-center gap-3 mt-2">
+                                <button onclick="updateQty(${i.id}, -1)" class="p-1 border rounded-lg">-</button>
+                                <span class="text-sm font-bold">${i.qty}</span>
+                                <button onclick="updateQty(${i.id}, 1)" class="p-1 border rounded-lg">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            const total = cart.reduce((a, b) => a + (b.price * b.qty), 0);
+            document.getElementById('cart-total').innerText = `Rp ${total.toLocaleString()}`;
+        }
+
+        // -- MODALS & ACTIONS --
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('hidden'); }
+        function toggleMobileMenu() { document.getElementById('mobile-overlay').classList.toggle('hidden'); }
+        
+        function showReceiptModal() {
+            if(cart.length === 0) return alert("Pesan dulu ya!");
+            const name = document.getElementById('customer-name').value;
+            const table = document.getElementById('table-number').value;
+            
+            document.getElementById('r-name').innerText = name || "-";
+            document.getElementById('r-table').innerText = table || "-";
+            document.getElementById('r-total').innerText = document.getElementById('cart-total').innerText;
+            
+            document.getElementById('r-items').innerHTML = cart.map(i => `
+                <div class="flex justify-between text-sm">
+                    <span>${i.name} x${i.qty}</span>
+                    <span>Rp ${(i.price * i.qty).toLocaleString()}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+
+        function hideReceiptModal() { document.getElementById('receipt-modal').classList.add('hidden'); }
+
+        function orderViaWA() {
+            const name = document.getElementById('customer-name').value;
+            const table = document.getElementById('table-number').value;
+            if(!name || !table) return alert("Isi nama dan nomor meja ya!");
+            
+            let msg = `*PESANAN SERATA COFFEE*\nNama: ${name}\nMeja: ${table}\n\n`;
+            cart.forEach(i => msg += `- ${i.name} (${i.qty}x)\n`);
+            msg += `\nTotal: ${document.getElementById('cart-total').innerText}`;
+            window.open(`https://wa.me/6287817014194?text=${encodeURIComponent(msg)}`);
+        }
+
+        function downloadAsImage() {
+            const area = document.getElementById('receipt-capture-area');
+            html2canvas(area, { backgroundColor: '#FDF8F5' }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Struk_Serata_${Date.now()}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+
+        // -- WHATSAPP POPUP LOGIC --
+        function toggleWAPopup() {
+            const popup = document.getElementById('wa-popup');
+            popup.classList.toggle('hidden');
+        }
+
+        function sendDirectWA() {
+            const msgInput = document.getElementById('wa-message-input');
+            const message = msgInput.value;
+            if(!message) return alert("Silakan ketik pesan Anda..");
+            
+            window.open(`https://wa.me/6287817014194?text=${encodeURIComponent(message)}`);
+            msgInput.value = "";
+            toggleWAPopup();
+        }
+
+        // -- TESTI FORM --
+        document.getElementById('testi-form').onsubmit = (e) => {
+            e.preventDefault();
+            testimonials.unshift({
+                name: document.getElementById('testi-name').value,
+                text: document.getElementById('testi-msg').value,
+                rating: parseInt(document.getElementById('testi-rating').value)
+            });
+            renderTestimonials();
+            e.target.reset();
+        };
+    </script>
+</body>
+</html>
