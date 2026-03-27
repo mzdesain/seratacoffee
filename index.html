@@ -7,19 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&family=Courier+Prime&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .serif { font-family: 'Playfair Display', serif; }
+        .mono { font-family: 'Courier Prime', monospace; }
         
-        /* Pengaturan Scroll Padding agar tidak tertutup Navbar */
+        /* Pengaturan Scroll Padding */
         html { scroll-padding-top: 100px; }
 
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #D7CCC8; border-radius: 10px; }
         
-        /* Animasi Pop untuk Keranjang */
+        /* Animasi Pop Keranjang */
         @keyframes cartPop {
             0% { transform: scale(1); }
             50% { transform: scale(1.4) rotate(10deg); }
@@ -27,7 +28,7 @@
         }
         .cart-pop { animation: cartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* Animasi Muncul Saat Scroll (Scroll Reveal) */
+        /* Scroll Reveal */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -43,23 +44,30 @@
             transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
 
-        /* Interaksi Tombol Hidup */
+        /* Tombol Hidup */
         .btn-alive {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .btn-alive:hover { transform: scale(1.05); filter: brightness(1.1); }
         .btn-alive:active { transform: scale(0.92); }
 
-        .menu-card {
-            transition: all 0.5s ease;
-        }
+        .menu-card { transition: all 0.5s ease; }
         .menu-card:hover { transform: translateY(-10px); }
         .menu-card img { transition: transform 0.8s ease; }
         .menu-card:hover img { transform: scale(1.1); }
 
         @media print {
             .no-print { display: none !important; }
+            .print-only { display: block !important; }
             body { background: white !important; }
+            #receipt-capture-area { box-shadow: none !important; border: none !important; }
+        }
+
+        /* Efek Thermal Receipt */
+        .thermal-receipt {
+            background: #fff;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            color: #1a1a1a;
         }
     </style>
 </head>
@@ -117,7 +125,6 @@
     <!-- Hero Section -->
     <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden no-print">
         <div class="absolute inset-0 z-0">
-            <!-- Background Image diperbaiki dan dicerahkan -->
             <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&q=80&w=1920" alt="Suasana Serata Coffee" class="w-full h-full object-cover grayscale-[10%] brightness-[0.45]">
         </div>
         <div class="relative z-10 text-center text-white px-6 max-w-4xl">
@@ -201,10 +208,10 @@
                     <form id="testi-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <input id="testi-name" type="text" class="w-full bg-white/5 border border-white/20 rounded-2xl p-5 focus:bg-white/10 outline-none transition-all placeholder:text-white/40" placeholder="Nama Anda" required>
-                            <select id="testi-rating" class="w-full bg-[#3C2A21] border border-white/20 rounded-2xl p-5 outline-none">
-                                <option value="5">Sempurna (5/5)</option>
-                                <option value="4">Sangat Baik (4/5)</option>
-                                <option value="3">Biasa Saja (3/5)</option>
+                            <select id="testi-rating" class="w-full bg-[#3C2A21] border border-white/20 rounded-2xl p-5 outline-none text-white">
+                                <option value="5" class="bg-[#3C2A21]">Sempurna (5/5)</option>
+                                <option value="4" class="bg-[#3C2A21]">Sangat Baik (4/5)</option>
+                                <option value="3" class="bg-[#3C2A21]">Biasa Saja (3/5)</option>
                             </select>
                         </div>
                         <textarea id="testi-msg" class="w-full bg-white/5 border border-white/20 rounded-2xl p-5 h-32 focus:bg-white/10 outline-none transition-all resize-none placeholder:text-white/40" placeholder="Ceritakan pengalaman Anda di sini..." required></textarea>
@@ -219,8 +226,8 @@
     <footer id="contact" class="bg-[#1A110D] text-[#EFEBE9] py-32 px-6 no-print">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
-                <div class="md:col-span-2">
-                    <div class="flex items-center gap-3 mb-8">
+                <div class="md:col-span-2 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start gap-3 mb-8">
                         <div class="w-12 h-12">
                             <svg viewBox="0 0 100 100" class="w-full h-full">
                                 <circle cx="50" cy="50" r="48" fill="#FDF8F5" stroke="#3C2A21" stroke-width="2" />
@@ -229,8 +236,8 @@
                         </div>
                         <span class="text-3xl font-bold tracking-tighter serif italic">Serata</span>
                     </div>
-                    <p class="text-white/40 max-w-sm mb-10 leading-relaxed font-light">Destinasi kopi pilihan yang menggabungkan harmoni alam liar dan kehangatan cangkir kopi khas pegunungan.</p>
-                    <div class="flex gap-6">
+                    <p class="text-white/40 max-w-sm mb-10 leading-relaxed font-light mx-auto md:mx-0">Destinasi kopi pilihan yang menggabungkan harmoni alam liar dan kehangatan cangkir kopi khas pegunungan.</p>
+                    <div class="flex justify-center md:justify-start gap-6">
                         <a href="#" class="text-white/20 hover:text-white transition-all btn-alive"><i data-lucide="instagram" class="w-6 h-6"></i></a>
                         <a href="#" class="text-white/20 hover:text-white transition-all btn-alive"><i data-lucide="facebook" class="w-6 h-6"></i></a>
                         <a href="#" class="text-white/20 hover:text-white transition-all btn-alive"><i data-lucide="youtube" class="w-6 h-6"></i></a>
@@ -252,11 +259,11 @@
                     </p>
                 </div>
             </div>
-            <div class="pt-12 border-t border-white/5 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-[10px] text-white/10">
-                <p>&copy; 2026 Serata Coffee & Camp. Hak Cipta Dilindungi.</p>
+            <div class="pt-12 border-t border-white/5 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-[10px] text-white/10 uppercase tracking-widest">
+                <p>&copy; 2026 Serata Coffee & Camp. trs by: muzanni</p>
                 <div class="flex gap-8 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white">Kebijakan Privasi</a>
-                    <a href="#" class="hover:text-white">Syarat Layanan</a>
+                    <a href="#" class="hover:text-white transition-all">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-white transition-all">Syarat Layanan</a>
                 </div>
             </div>
         </div>
@@ -270,8 +277,8 @@
                 <h2 class="text-2xl font-bold text-[#3C2A21] serif italic">Pesanan Anda</h2>
                 <button onclick="toggleCart()" class="p-2 hover:bg-[#F5EBE0] rounded-full text-[#3C2A21] btn-alive"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            <div id="cart-items" class="flex-grow overflow-y-auto p-8 space-y-8 custom-scrollbar"></div>
-            <div class="p-8 border-t bg-[#FDF8F5] space-y-6">
+            <div id="cart-items" class="flex-grow overflow-y-auto p-8 space-y-8 custom-scrollbar bg-white"></div>
+            <div class="p-8 border-t bg-[#FDF8F5] space-y-6 shadow-inner">
                 <div class="space-y-4">
                     <input id="customer-name" type="text" placeholder="Nama Anda" class="w-full p-5 rounded-2xl border border-[#D7CCC8] text-sm focus:ring-1 focus:ring-[#3C2A21] outline-none bg-white">
                     <input id="table-number" type="number" placeholder="Meja No." class="w-full p-5 rounded-2xl border border-[#D7CCC8] text-sm focus:ring-1 focus:ring-[#3C2A21] outline-none bg-white">
@@ -280,50 +287,84 @@
                     <span class="text-sm text-[#8D6E63]">Total Pembayaran</span>
                     <span id="cart-total" class="text-3xl font-bold text-[#3C2A21]">Rp 0</span>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="showReceiptModal()" class="bg-white text-[#3C2A21] border border-[#3C2A21] py-4 rounded-full font-bold btn-alive text-xs">Struk Digital</button>
-                    <button onclick="orderViaWA()" class="bg-[#3C2A21] text-white py-4 rounded-full font-bold btn-alive shadow-xl text-xs">Pesan via WA</button>
-                </div>
+                <button onclick="showReceiptModal()" class="w-full bg-[#3C2A21] text-white py-5 rounded-full font-bold btn-alive shadow-xl text-sm uppercase tracking-widest">Lanjut ke Struk</button>
             </div>
         </div>
     </div>
 
-    <!-- Receipt Modal -->
+    <!-- Receipt Modal (Thermal Style) -->
     <div id="receipt-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-6 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-md no-print" onclick="hideReceiptModal()"></div>
-        <div class="relative bg-white w-full max-w-sm rounded-[3rem] overflow-hidden shadow-2xl">
-            <div id="receipt-capture-area" class="bg-white">
-                <div class="bg-[#3C2A21] text-white p-12 text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-full p-1 flex items-center justify-center">
-                         <svg viewBox="0 0 100 100" class="w-10 h-10">
-                            <circle cx="50" cy="50" r="48" fill="#3C2A21" />
-                            <text x="50" y="65" text-anchor="middle" fill="white" style="font-size: 30px; font-weight: 900; font-family: serif;">S</text>
-                        </svg>
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm no-print" onclick="hideReceiptModal()"></div>
+        <div class="relative bg-white w-full max-w-[380px] rounded-[1.5rem] overflow-hidden shadow-2xl flex flex-col">
+            <!-- Scrollable Receipt Area -->
+            <div id="receipt-scroll-container" class="overflow-y-auto custom-scrollbar flex-grow p-4 md:p-8 bg-stone-50">
+                <div id="receipt-capture-area" class="thermal-receipt p-6 md:p-10 border border-stone-200">
+                    <div class="text-center mb-8 border-b-2 border-dashed border-stone-300 pb-6">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-[#3C2A21] rounded-full flex items-center justify-center shadow-md">
+                             <svg viewBox="0 0 100 100" class="w-10 h-10">
+                                <circle cx="50" cy="50" r="48" fill="white" />
+                                <text x="50" y="65" text-anchor="middle" fill="#3C2A21" style="font-size: 30px; font-weight: 900; font-family: serif;">S</text>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold serif mono tracking-tight">SERATA COFFEE & CAMP</h3>
+                        <p class="text-[10px] mono opacity-70 mt-1 uppercase">Jl. Raya Puncak, Bogor, Jawa Barat</p>
+                        <p class="text-[10px] mono opacity-70">www.seratacoffee.com</p>
                     </div>
-                    <h3 class="font-bold text-xl serif italic">Serata Coffee</h3>
-                    <p class="text-[9px] opacity-60 mt-1 uppercase tracking-widest font-light italic">Authentic Camp Vibes</p>
-                </div>
-                <div class="p-10 space-y-6 bg-[#FDF8F5]">
-                    <div class="flex justify-between text-[10px] border-b border-[#3C2A21] border-dashed pb-4 text-[#5D4037]">
-                        <span>Meja: <b id="r-table" class="text-[#3C2A21]">-</b></span>
-                        <span>Nama: <b id="r-name" class="text-[#3C2A21]">-</b></span>
-                    </div>
-                    <div id="r-items" class="space-y-4 pt-2"></div>
-                    <div class="border-t border-[#3C2A21] border-dashed pt-6 mt-8">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-xs text-[#5D4037]">Total</span>
-                            <span id="r-total" class="text-2xl font-bold text-[#3C2A21]">Rp 0</span>
+
+                    <div class="space-y-4 mb-8 text-[11px] mono">
+                        <div class="flex justify-between border-b border-dotted pb-2">
+                            <span>ORDER ID</span>
+                            <span id="r-order-id" class="font-bold">#SRT-000000</span>
+                        </div>
+                        <div class="flex justify-between border-b border-dotted pb-2">
+                            <span>TANGGAL</span>
+                            <span id="r-date">27/03/2026</span>
+                        </div>
+                        <div class="flex justify-between border-b border-dotted pb-2">
+                            <span>NAMA</span>
+                            <span id="r-name" class="font-bold">PELANGGAN</span>
+                        </div>
+                        <div class="flex justify-between border-b border-dotted pb-2">
+                            <span>MEJA</span>
+                            <span id="r-table" class="font-bold">00</span>
                         </div>
                     </div>
-                    <p class="text-[8px] text-center text-stone-400 mt-10 italic">Terima kasih atas kunjungannya!</p>
+
+                    <div class="space-y-3 mb-8 mono">
+                        <div class="flex justify-between text-[10px] font-bold border-b-2 border-dashed border-stone-300 pb-2 mb-4 uppercase">
+                            <span>Menu</span>
+                            <span>Total</span>
+                        </div>
+                        <div id="r-items" class="space-y-2 text-[11px]">
+                            <!-- Menu Items -->
+                        </div>
+                    </div>
+
+                    <div class="border-t-2 border-dashed border-stone-300 pt-6 mb-10 mono">
+                        <div class="flex justify-between items-center text-lg font-bold">
+                            <span>TOTAL</span>
+                            <span id="r-total">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center space-y-2 mono border-t-2 border-dashed border-stone-300 pt-6">
+                        <p class="text-[12px] font-bold italic">Terima kasih telah berkunjung!</p>
+                        <p class="text-[9px] opacity-60">Mohon perlihatkan struk ini ke kasir untuk pembayaran.</p>
+                        <div class="pt-4 opacity-30 text-[8px] uppercase tracking-widest">
+                            trs by: muzanni
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="p-8 bg-white border-t space-y-3 no-print">
+
+            <!-- Receipt Actions Footer -->
+            <div class="p-6 bg-white border-t space-y-3 no-print shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)]">
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="window.print()" class="bg-[#3C2A21] text-white py-3 rounded-full font-bold flex items-center justify-center gap-2 text-[10px] btn-alive"><i data-lucide="printer" class="w-4 h-4"></i> Cetak</button>
-                    <button onclick="downloadAsImage()" class="bg-stone-100 text-[#3C2A21] py-3 rounded-full font-bold flex items-center justify-center gap-2 text-[10px] btn-alive"><i data-lucide="image" class="w-4 h-4"></i> Unduh PNG</button>
+                    <button onclick="window.print()" class="bg-[#3C2A21] text-white py-3 rounded-full font-bold flex items-center justify-center gap-2 text-[10px] btn-alive uppercase tracking-widest"><i data-lucide="printer" class="w-4 h-4"></i> Cetak</button>
+                    <button onclick="downloadAsImage()" class="bg-stone-100 text-[#3C2A21] border border-stone-200 py-3 rounded-full font-bold flex items-center justify-center gap-2 text-[10px] btn-alive uppercase tracking-widest"><i data-lucide="image" class="w-4 h-4"></i> Download</button>
                 </div>
-                <button onclick="hideReceiptModal()" class="w-full border border-stone-200 text-[#3C2A21] py-3 rounded-full font-bold text-[10px] btn-alive">Kembali</button>
+                <button onclick="orderViaWA()" class="w-full bg-[#25D366] text-white py-3 rounded-full font-bold flex items-center justify-center gap-2 text-[10px] btn-alive uppercase tracking-widest shadow-lg shadow-green-100"><i data-lucide="send" class="w-4 h-4"></i> Kirim ke WhatsApp Admin</button>
+                <button onclick="hideReceiptModal()" class="w-full border border-stone-100 text-stone-400 py-2 rounded-full font-bold text-[9px] uppercase tracking-widest transition-all hover:text-[#3C2A21]">Kembali ke Menu</button>
             </div>
         </div>
     </div>
@@ -344,19 +385,18 @@
                 <button onclick="toggleWAPopup()" class="ml-auto text-stone-300 hover:text-stone-900 btn-alive"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <textarea id="wa-message-input" placeholder="Tuliskan pesan Anda..." class="w-full h-24 p-5 bg-[#FDF8F5] rounded-2xl text-sm border-none focus:ring-1 focus:ring-[#3C2A21] outline-none resize-none mb-6 text-[#3C2A21] font-light"></textarea>
-            <button onclick="sendDirectWA()" class="w-full bg-[#3C2A21] text-white py-4 rounded-full text-[10px] font-bold flex items-center justify-center gap-2 hover:bg-[#5D4037] transition-all shadow-lg btn-alive">
+            <button onclick="sendDirectWA()" class="w-full bg-[#3C2A21] text-white py-4 rounded-full text-[10px] font-bold flex items-center justify-center gap-2 hover:bg-[#5D4037] transition-all shadow-lg btn-alive uppercase tracking-widest">
                 Kirim Pesan <i data-lucide="send" class="w-3 h-3"></i>
             </button>
         </div>
 
         <button onclick="toggleWAPopup()" class="bg-[#3C2A21] text-white p-5 rounded-full shadow-2xl btn-alive flex items-center justify-center relative group">
             <i data-lucide="message-circle" class="w-8 h-8"></i>
-            <span class="absolute right-full mr-6 bg-[#3C2A21] text-white px-5 py-3 rounded-2xl text-[10px] font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap pointer-events-none">Hubungi Admin</span>
+            <span class="absolute right-full mr-6 bg-[#3C2A21] text-white px-5 py-3 rounded-2xl text-[10px] font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap pointer-events-none uppercase tracking-widest">Chat Kami</span>
         </button>
     </div>
 
     <script>
-        // -- DATA MENU DENGAN GAMBAR LENGKAP --
         const menuData = [
             { id: 1, name: "Signature Camp Latte", price: 32000, category: "Kopi", img: "https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&q=80&w=400", desc: "Perpaduan kopi robusta dengan sensasi smokey karamel." },
             { id: 2, name: "V60 Flores Bajawa", price: 28000, category: "Kopi", img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=400", desc: "Manual brew dengan profil rasa nutty dan chocolatey." },
@@ -381,7 +421,6 @@
         const itemsPerPage = 10;
         let currentPage = 1;
 
-        // -- INITIALIZATION --
         window.onload = () => {
             lucide.createIcons();
             renderMenu();
@@ -391,7 +430,6 @@
             updateCartUI();
         };
 
-        // -- NAV SCROLL --
         window.onscroll = () => {
             const nav = document.getElementById('navbar');
             const brand = document.getElementById('nav-brand');
@@ -413,7 +451,6 @@
             }
         };
 
-        // -- SCROLL REVEAL --
         function initScrollReveal() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -426,14 +463,14 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // -- GALLERY SLIDE --
         let galleryOffset = 0;
         function slideGallery(dir) {
             const container = document.getElementById('gallery-container');
+            if(!container) return;
             const width = container.children[0].offsetWidth;
             galleryOffset += dir;
-            if (galleryOffset < 0) galleryOffset = container.children.length - 2;
-            if (galleryOffset > container.children.length - 2) galleryOffset = 0;
+            if (galleryOffset < 0) galleryOffset = container.children.length - 1;
+            if (galleryOffset > container.children.length - 1) galleryOffset = 0;
             container.style.transform = `translateX(-${galleryOffset * width}px)`;
         }
 
@@ -441,7 +478,6 @@
             setInterval(() => slideGallery(1), 5000);
         }
 
-        // -- VOICE FEEDBACK --
         function speakOrderAdded() {
             const msg = new SpeechSynthesisUtterance("Pesanan telah ditambahkan");
             msg.lang = 'id-ID';
@@ -449,7 +485,6 @@
             window.speechSynthesis.speak(msg);
         }
 
-        // -- RENDER MENU --
         function renderMenu() {
             const container = document.getElementById('menu-container');
             const cats = [...new Set(menuData.map(i => i.category))];
@@ -582,13 +617,16 @@
             const table = document.getElementById('table-number').value;
             if(!name || !table) return alert("Isi nama dan nomor meja dulu ya.");
             
-            document.getElementById('r-name').innerText = name;
+            // Setup Receipt Data
+            document.getElementById('r-name').innerText = name.toUpperCase();
             document.getElementById('r-table').innerText = table;
+            document.getElementById('r-date').innerText = new Date().toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+            document.getElementById('r-order-id').innerText = "#SRT-" + Math.floor(100000 + Math.random() * 900000);
             document.getElementById('r-total').innerText = document.getElementById('cart-total').innerText;
             
             document.getElementById('r-items').innerHTML = cart.map(i => `
-                <div class="flex justify-between text-[11px] font-light italic">
-                    <span>${i.name} x${i.qty}</span>
+                <div class="flex justify-between">
+                    <span>${i.name} (x${i.qty})</span>
                     <span class="font-bold">Rp ${(i.price * i.qty).toLocaleString()}</span>
                 </div>
             `).join('');
@@ -601,17 +639,25 @@
         function orderViaWA() {
             const name = document.getElementById('customer-name').value;
             const table = document.getElementById('table-number').value;
-            if(!name || !table) return alert("Harap isi identitas Anda.");
+            const orderId = document.getElementById('r-order-id').innerText;
             
-            let msg = `*PESANAN SERATA COFFEE*\nNama: ${name}\nMeja: ${table}\n\n`;
-            cart.forEach(i => msg += `• ${i.name} (${i.qty}x)\n`);
-            msg += `\n*Total Akhir: ${document.getElementById('cart-total').innerText}*`;
+            let msg = `*STRUK PESANAN - SERATA COFFEE*\n`;
+            msg += `------------------------------\n`;
+            msg += `ID: ${orderId}\n`;
+            msg += `Nama: ${name}\n`;
+            msg += `Meja: ${table}\n`;
+            msg += `------------------------------\n`;
+            cart.forEach(i => msg += `• ${i.name} (x${i.qty})\n`);
+            msg += `------------------------------\n`;
+            msg += `*Total Akhir: ${document.getElementById('cart-total').innerText}*\n\n`;
+            msg += `Terima kasih! Pesanan saya sedang diproses.`;
+            
             window.open(`https://wa.me/6287817014194?text=${encodeURIComponent(msg)}`);
         }
 
         function downloadAsImage() {
             const area = document.getElementById('receipt-capture-area');
-            html2canvas(area).then(canvas => {
+            html2canvas(area, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `Serata_Receipt_${Date.now()}.png`;
                 link.href = canvas.toDataURL("image/png");
